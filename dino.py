@@ -1,20 +1,19 @@
 import pygame
 
 _ = pygame.init()
-
 screen = pygame.display.set_mode((1000, 800))
-
 isRunning = True
 
 # Player
-y: int = 600
-dino = pygame.Rect(480, y, 60, 60)
+baseY: int = 600
+dino = pygame.Rect(480, baseY, 60, 60)
 # Speed vars
 speed: float = -1500.0
 velocity: float = 0
 g: float = 9.8
 
 
+# Player movement
 def isOnGround(y: float) -> bool:
     return y == 600.0
 
@@ -24,11 +23,20 @@ def isntNearGround(y: float, v: float) -> bool:
 
 
 def velocityCalc(y: float, v: float) -> float:
-    if not isOnGround(dino.y):
+    global g
+    if not isOnGround(y):
         v += g
-    if not isntNearGround(dino.y, v):
-        v = 600 - dino.y
+        print(f"Velocity: {v}")
+    if not isntNearGround(y, v):
+        v = 600 - y
+        print(f"Velocity: {v}")
     return v
+
+
+def movePlayer(y: float) -> None:
+    global velocity
+    velocity = velocityCalc(y, velocity)
+    dino.move_ip(0, velocity)
 
 
 clock = pygame.time.Clock()
@@ -44,6 +52,5 @@ while isRunning:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and isOnGround(dino.y):
             velocity = speed * dt
-    velocity = velocityCalc(dino.y, velocity)
-    dino.move_ip(0, velocity)
+    movePlayer(dino.y)
     pygame.display.flip()

@@ -31,6 +31,10 @@ loafY: float = 500.0
 baseY: float = 500.0
 loaf = pygame.image.load("res/loaf.png")
 loaf = pygame.transform.scale(loaf, (270, 160))
+loaf_rect = loaf.get_rect(topleft=(0, 0))
+loaf_inflX = -20
+loaf_inflY = -10
+loaf_hitbox = loaf_rect.inflate(loaf_inflX, loaf_inflY)
 
 pygame.display.set_icon(loaf)
 pygame.display.set_caption("Loaf runner")
@@ -69,23 +73,38 @@ def movePlayer(y: float) -> None:
     global loafY
     velocity = velocityCalc(y, velocity)
     loafY += velocity
-    _ = screen.blit(loaf, (loafX, loafY))
+    loaf_rect.topleft = (100, round(loafY))
+    loaf_hitbox.topleft = (100 - loaf_inflX, round(loafY) - loaf_inflY)
+    # _ = pygame.draw.rect(screen, (0, 255, 0), loaf_hitbox, 2)
+    _ = screen.blit(loaf, loaf_rect)
 
 
 # Enemy
 volk = pygame.image.load("res/volk.png")
 volk = pygame.transform.scale(volk, (280, 130))
-volkX: float = 1000
-volkSpeed = bgSpeed + 6.0
+volkX: int = 1100
+volkSpeed: int = round(bgSpeed + 8.0)
+volk_rect = volk.get_rect(topleft=(600, 0))
+volk_inflX: int = -40
+volk_inflY: int = -20
+volk_hitbox = volk_rect.inflate(volk_inflX, volk_inflY)
 
 
 def moveEnemy() -> None:
     global volkX
     global bgSpeed
     volkX -= volkSpeed
+    volk_rect.topleft = (volkX, 530)
+    volk_hitbox.topleft = (volkX - volk_inflX - 10, 530 - volk_inflX)
     _ = screen.blit(volk, (volkX, 530))
+    _  #  = pygame.draw.rect(screen, (0, 255, 0), volk_hitbox, 2)
     if volkX <= -280:
-        volkX = 1000
+        volkX = 1100
+
+
+def gameOver():
+    global isRunning
+    isRunning = False
 
 
 clock = pygame.time.Clock()
@@ -101,6 +120,9 @@ while isRunning:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and isOnGround(loafY):
             velocity = loafJump * dt
+    if loaf_hitbox.colliderect(volk_hitbox):
+        print("hit")
+        gameOver()
     moveBackground()
     moveEnemy()
     movePlayer(loafY)

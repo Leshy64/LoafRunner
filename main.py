@@ -11,7 +11,7 @@ bg = pygame.transform.scale(bg, (1000, 570))
 road = pygame.image.load("res/road.png")
 road = pygame.transform.scale(road, (1000, 230))
 bgX: float = 0
-bgSpeed: float = 20
+bgSpeed: float = 17
 
 
 def moveBackground() -> None:
@@ -21,7 +21,7 @@ def moveBackground() -> None:
     _ = screen.blit(bg, (bgX + 1000, 0))
     _ = screen.blit(road, (bgX, 570))
     _ = screen.blit(road, (bgX + 1000, 570))
-    if bgX == -1000:
+    if bgX <= -1000:
         bgX = 0
 
 
@@ -36,9 +36,9 @@ pygame.display.set_icon(loaf)
 pygame.display.set_caption("Loaf runner")
 
 # Speed vars
-speed: float = -2000.0
+loafJump: float = -2000.0
 velocity: float = 0
-g: float = 9.8
+g: float = 5.0
 
 
 # Player movement
@@ -72,6 +72,22 @@ def movePlayer(y: float) -> None:
     _ = screen.blit(loaf, (loafX, loafY))
 
 
+# Enemy
+volk = pygame.image.load("res/volk.png")
+volk = pygame.transform.scale(volk, (280, 130))
+volkX: float = 1000
+volkSpeed = bgSpeed + 6.0
+
+
+def moveEnemy() -> None:
+    global volkX
+    global bgSpeed
+    volkX -= volkSpeed
+    _ = screen.blit(volk, (volkX, 530))
+    if volkX <= -280:
+        volkX = 1000
+
+
 clock = pygame.time.Clock()
 while isRunning:
     # _ = screen.fill((0, 0, 0))
@@ -84,7 +100,8 @@ while isRunning:
             pygame.quit()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and isOnGround(loafY):
-            velocity = speed * dt
+            velocity = loafJump * dt
     moveBackground()
+    moveEnemy()
     movePlayer(loafY)
     pygame.display.flip()

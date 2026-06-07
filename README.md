@@ -8,8 +8,8 @@ To-do:
 - [x] Loaf texture
 - [x] Background movement
 - [x] Background texture
-- [ ] Enemy movement and collision
-- [ ] Enemy texture
+- [x] Enemy movement and collision
+- [x] Enemy texture
 - [ ] Gameover and restart
 - [ ] GUI and score system
 - [ ] Loaf animations

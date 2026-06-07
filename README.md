@@ -6,12 +6,13 @@ A silly russian car everybody knows.
 To-do:
 - [x] Jump mechanic
 - [x] Loaf texture
-- [ ] Background movement
-- [ ] Background texture
+- [x] Background movement
+- [x] Background texture
 - [ ] Enemy movement and collision
 - [ ] Enemy texture
 - [ ] Gameover and restart
-- [ ] GUI
+- [ ] GUI and score system
 - [ ] Loaf animations
 - [ ] Enemy animations
+- [ ] Enemy speed increase
 - [ ] Sound
